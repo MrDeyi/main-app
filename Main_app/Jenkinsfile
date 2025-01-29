@@ -40,7 +40,7 @@ pipeline {
         stage("Trigger Test Pipeline") {
             steps {
              dir('Main_app'){
-                build job: 'test-app-pipeline', wait: true
+                build job: 'Test Automation', wait: true
                }
             }
         }
