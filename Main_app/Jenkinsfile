@@ -32,7 +32,7 @@ pipeline {
                dir('Main_app'){
                  buildProject()
                  sh 'nohup mvn spring-boot:run &'
-                 sleep(time: 5, unit: 'SECONDS') // Give time for app to start
+                 sleep(time: 5, unit: 'SECONDS') // Give time fo
                }
             }
         }
