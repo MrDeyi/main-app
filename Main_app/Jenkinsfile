@@ -1,13 +1,14 @@
 @Library('service-bridge-jenkins-shared-library') _
 
 pipeline {
+    agent any
 
     environment {
         BRANCH = 'main'
         CREDENTIALS_ID = 'github-security-passcode'
         REPO_URL = 'https://github.com/MrDeyi/main-app.git'
     }
-    agent any
+
     tools {
         maven 'Maven:3.9.1'
     }
@@ -15,42 +16,41 @@ pipeline {
     stages {
         stage("Clean Up") {
             steps {
-               deleteDir()
+                deleteDir()
             }
         }
 
         stage("Clone Repo") {
             steps {
-              cloneRepo(BRANCH,CREDENTIALS_ID,REPO_URL)
-             }
+                cloneRepo(BRANCH, CREDENTIALS_ID, REPO_URL)
+            }
         }
 
         stage("Build and Run App") {
             steps {
-               dir('Main_app'){
-                 buildProject()
-                 sh 'nohup mvn spring-boot:run &'
-                 sleep(time: 5, unit: 'SECONDS') // Give time
-               }
+                dir('Main_app') {
+                    buildProject()
+                    sh 'nohup mvn spring-boot:run &'
+                    sleep(time: 5, unit: 'SECONDS') // Give time for the app to start
+                }
             }
         }
 
         stage("Trigger Test Pipeline") {
             steps {
-             dir('Main_app'){
-               build job: 'Test Automation',
-                                     wait: false,
-                                     parameters: [string(name: 'RUN_FORCE', value: 'true')]
-
-               }
+                dir('Main_app') {
+                    build job: 'Test Automation',
+                        wait: false,
+                        parameters: [string(name: 'RUN_FORCE', value: 'true')]
+                }
             }
         }
 
         stage("Stop App") {
             steps {
-              dir('Main_app'){
-              sh "pkill -f 'java -jar' || true"
-              }
+                dir('Main_app') {
+                    sh "pkill -f 'java -jar' || true"
+                }
             }
         }
     }
