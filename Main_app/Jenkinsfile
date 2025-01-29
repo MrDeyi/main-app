@@ -27,25 +27,29 @@ pipeline {
              }
         }
 
-        stage("Build") {
+        stage("Build and Run App") {
             steps {
                dir('Main_app'){
                  buildProject()
+                 sh 'nohup java -jar target/*.jar &'
+                 sleep(time: 5, unit: 'SECONDS') // Give time for app to start
                }
             }
         }
 
-        stage("Test") {
+        stage("Trigger Test Pipeline") {
             steps {
              dir('Main_app'){
-                runTests()
+                build job: 'test-app-pipeline', wait: true
                }
             }
         }
 
-        stage("Run Automated tests") {
+        stage("Stop App") {
             steps {
-              deployProject()
+              dir('Main_app'){
+              sh "pkill -f 'java -jar'"
+              }
             }
         }
     }
