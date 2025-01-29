@@ -48,7 +48,7 @@ pipeline {
         stage("Stop App") {
             steps {
               dir('Main_app'){
-              sh "pkill -f 'java -jar'"
+              sh "pkill -f 'java -jar' || true"
               }
             }
         }
