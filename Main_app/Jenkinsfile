@@ -5,7 +5,7 @@ pipeline {
     environment {
         BRANCH = 'main'
         CREDENTIALS_ID = 'github-security-passcode'
-        REPO_URL = 'https://github.com/MrDeyi/test-app.git'
+        REPO_URL = 'https://github.com/MrDeyi/main-app.git'
     }
 
 
@@ -24,18 +24,22 @@ pipeline {
         stage("Clone Repo") {
             steps {
               cloneRepo(BRANCH,CREDENTIALS_ID,REPO_URL)
-            }
+             }
         }
 
         stage("Build") {
             steps {
-              buildProject()
+               dir('Main_app'){
+                 buildProject()
+               }
             }
         }
 
         stage("Test") {
             steps {
-              runTests()
+             dir('Main_app'){
+                runTests()
+               }
             }
         }
 
