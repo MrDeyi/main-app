@@ -1,0 +1,48 @@
+@Library('service-bridge-jenkins-shared-library') _
+
+pipeline {
+
+    environment {
+        BRANCH = 'main'
+        CREDENTIALS_ID = 'github-security-passcode'
+        REPO_URL = 'https://github.com/MrDeyi/test-app.git'
+    }
+
+
+    agent any
+    tools {
+        maven 'Maven:3.9.1'
+    }
+
+    stages {
+        stage("Clean Up") {
+            steps {
+               deleteDir()
+            }
+        }
+
+        stage("Clone Repo") {
+            steps {
+              cloneRepo(BRANCH,CREDENTIALS_ID,REPO_URL)
+            }
+        }
+
+        stage("Build") {
+            steps {
+              buildProject()
+            }
+        }
+
+        stage("Test") {
+            steps {
+              runTests()
+            }
+        }
+
+        stage("Run Automated tests") {
+            steps {
+              deployProject()
+            }
+        }
+    }
+}
