@@ -40,8 +40,8 @@ pipeline {
             steps {
                 dir('Main_app') {
                     build job: 'Test Automation',
-                        wait: false,
-                        parameters: [string(name: 'RUN_FORCE', value: 'true')]
+                        wait: false
+//                         parameters: [string(name: 'RUN_FORCE', value: 'true')]
                 }
             }
         }
