@@ -26,21 +26,11 @@ pipeline {
             }
         }
 
-        stage("Build and Run App") {
-            steps {
-                dir('Main_app') {
-                    buildProject()
-                    sh 'nohup mvn spring-boot:run &'
-                    sleep(time: 5, unit: 'SECONDS') //
-                }
-            }
-        }
-
         stage("Trigger Test Pipeline") {
             steps {
                 dir('Main_app') {
                     sh ' mvn -Dtest=CucumberTestRunner test'
-'
+
                 }
             }
         }
