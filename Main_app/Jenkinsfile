@@ -16,14 +16,12 @@ pipeline {
     stages {
         stage("Clean Up") {
             steps {
-                // Delete workspace directory before build
                 deleteDir()
             }
         }
 
         stage("Clone Repo") {
             steps {
-                // Clone the specified branch of the repository
                 cloneRepo(BRANCH, CREDENTIALS_ID, REPO_URL)
             }
         }
@@ -31,11 +29,7 @@ pipeline {
         stage("Trigger Test Pipeline") {
             steps {
                 dir('Main_app') {
-                    // Run the Cucumber tests
                     sh 'mvn -Dtest=CucumberTestRunner test'
-
-                    // Print the contents of the reports directory for debugging
-                    sh 'ls -R target/cucumber-reports/'
                 }
             }
         }
@@ -43,20 +37,19 @@ pipeline {
 
     post {
         always {
-            // Archive the Cucumber report JSON and HTML files
-            archiveArtifacts artifacts: 'target/cucumber-reports/**/*.{json,html}', fingerprint: true
+            // Archive the HTML and JSON reports directly from the target directory
+            archiveArtifacts artifacts: 'target/*.{html,json}', fingerprint: true
 
-            // Publish the Cucumber reports
+            // Publish the Cucumber report
             cucumberReport()
         }
     }
 }
 
-// Function to publish the Cucumber reports
 def cucumberReport() {
-    // Assuming you are using the Cucumber Reports Plugin
-    cucumber {
-        fileIncludePattern = '**/cucumber.json' // Adjust if necessary
-        jsonReportDir = 'target/cucumber-reports/json' // Adjust to your directory structure
-    }
+    // Publish the Cucumber report
+    cucumber(
+        fileIncludePattern: '**/cucumber.json', // Pattern to find the JSON report
+        jsonReportDir: 'target' // Specify that the JSON report is in the target directory
+    )
 }
