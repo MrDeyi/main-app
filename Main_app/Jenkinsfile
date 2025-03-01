@@ -7,6 +7,7 @@ pipeline {
         BRANCH = 'main'
         CREDENTIALS_ID = 'github-security-passcode'
         REPO_URL = 'https://github.com/MrDeyi/main-app.git'
+        RECIPIENTS = 'mandilakhedeyi01@gmail.com' // Replace with your email address
     }
 
     tools {
@@ -50,10 +51,12 @@ pipeline {
                 def targetDirExists = fileExists('Main_app/target')
                 if (targetDirExists) {
                     // Archive the HTML and JSON reports directly from the target directory within Main_app
-                    archiveArtifacts artifacts: 'Main_app/target/*.json', fingerprint: true
+                    archiveArtifacts artifacts: 'Main_app/target/*.json,Main_app/target/**/*.html', fingerprint: true
 
                     // Publish the Cucumber report
                     cucumberReport()
+                    // Send email with the Cucumber report attached
+                    sendEmailReport()
                 } else {
                     echo 'Target directory does not exist. Skipping artifact archiving and report publishing.'
                 }
@@ -67,5 +70,20 @@ def cucumberReport() {
     cucumber(
         fileIncludePattern: '**/cucumber.json', // Pattern to find the JSON report
         jsonReportDir: 'Main_app/target' // Specify that the JSON report is in the target directory
+    )
+}
+
+def sendEmailReport() {
+    // Send email notification with the Cucumber report attached
+    emailext (
+        to: "${RECIPIENTS}",
+        subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
+        body: """<p>Hello,</p>
+                  <p>Please find attached the Cucumber test results for the build: ${currentBuild.fullDisplayName}.</p>
+                  <p>Best regards,</p>
+                  <p>Your Jenkins CI</p>""",
+        attachLog: true,
+        attachmentsPattern: 'Main_app/target/**/*.html,Main_app/target/**/*.json', // Attach reports
+        mimeType: 'text/html' // Use HTML for the email body
     )
 }
