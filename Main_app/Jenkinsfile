@@ -33,6 +33,14 @@ pipeline {
                 }
             }
         }
+        stage("Pause After Tests") {
+                    steps {
+                        script {
+                            echo 'Pausing for 1 minute to allow for test results to stabilize...'
+                            sleep 60 // Pause for 60 seconds (1 minute)
+                        }
+                    }
+                }
     }
 
     post {
