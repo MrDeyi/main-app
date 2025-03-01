@@ -16,12 +16,14 @@ pipeline {
     stages {
         stage("Clean Up") {
             steps {
+                // Delete workspace directory before build
                 deleteDir()
             }
         }
 
         stage("Clone Repo") {
             steps {
+                // Clone the specified branch of the repository
                 cloneRepo(BRANCH, CREDENTIALS_ID, REPO_URL)
             }
         }
@@ -29,24 +31,25 @@ pipeline {
         stage("Trigger Test Pipeline") {
             steps {
                 dir('Main_app') {
-                    sh ' mvn -Dtest=CucumberTestRunner test'
-
+                    // Run the Cucumber tests
+                    sh 'mvn -Dtest=CucumberTestRunner test'
                 }
             }
         }
+    }
 
-        post {
-            always {
-                // Archive the Cucumber report
-                archiveArtifacts artifacts: 'target/cucumber-reports/**/*.json', fingerprint: true
+    post {
+        always {
+            // Archive the Cucumber report JSON files
+            archiveArtifacts artifacts: 'target/cucumber-reports/**/*.json', fingerprint: true
 
-                 // Publish the Cucumber report
-                 cucumberReport()
-                }
-            }
+            // Publish the Cucumber reports
+            cucumberReport()
+        }
     }
 }
 
+// Function to publish the Cucumber reports
 def cucumberReport() {
     // Assuming you are using the Cucumber Reports Plugin
     cucumber {
