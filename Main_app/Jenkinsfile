@@ -39,7 +39,8 @@ pipeline {
         stage("Trigger Test Pipeline") {
             steps {
                 dir('Main_app') {
-                    sh 'mvn clean install'
+                    sh ' mvn -Dtest=CucumberTestRunner test'
+'
                 }
             }
         }
