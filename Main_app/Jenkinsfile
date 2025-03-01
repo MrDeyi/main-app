@@ -35,12 +35,22 @@ pipeline {
             }
         }
 
-        stage("Stop App") {
-            steps {
-                dir('Main_app') {
-                    sh "pkill -f 'java -jar' || true"
+        post {
+            always {
+                // Archive the Cucumber report
+                archiveArtifacts artifacts: 'target/cucumber-reports/**/*.json', fingerprint: true
+
+                 // Publish the Cucumber report
+                 cucumberReport()
                 }
             }
-        }
+    }
+}
+
+def cucumberReport() {
+    // Assuming you are using the Cucumber Reports Plugin
+    cucumber {
+        fileIncludePattern = '**/cucumber.json' // Adjust if necessary
+        jsonReportDir = 'target/cucumber-reports/json' // Adjust to your directory structure
     }
 }
