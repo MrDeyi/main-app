@@ -57,6 +57,7 @@ pipeline {
                     cucumberReport()
                     // Send email with the Cucumber report attached
                     sendEmailReport()
+                    echo 'Successfully sent'
                 } else {
                     echo 'Target directory does not exist. Skipping artifact archiving and report publishing.'
                 }
