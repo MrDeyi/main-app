@@ -37,19 +37,27 @@ pipeline {
 
     post {
         always {
-            // Archive the HTML and JSON reports directly from the target directory
-            archiveArtifacts artifacts: 'target/*.{html,json}', fingerprint: true
+            script {
+                // Check if the target directory exists
+                def targetDirExists = fileExists('Main_app/target')
+                if (targetDirExists) {
+                    // Archive the HTML and JSON reports directly from the target directory within Main_app
+                    archiveArtifacts artifacts: 'Main_app/target/*.{html,json}', fingerprint: true
 
-            // Publish the Cucumber report
-            cucumberReport()
+                    // Publish the Cucumber report
+                    cucumberReport()
+                } else {
+                    echo 'Target directory does not exist. Skipping artifact archiving and report publishing.'
+                }
+            }
         }
     }
 }
 
 def cucumberReport() {
-    // Publish the Cucumber report
+    // Publish the Cucumber report from the correct directory
     cucumber(
         fileIncludePattern: '**/cucumber.json', // Pattern to find the JSON report
-        jsonReportDir: 'target' // Specify that the JSON report is in the target directory
+        jsonReportDir: 'Main_app/target' // Specify that the JSON report is in the target directory
     )
 }
