@@ -41,7 +41,7 @@ pipeline {
     post {
         always {
             // Archive the Cucumber report JSON files
-            archiveArtifacts artifacts: 'target/cucumber-reports/**/*.json', fingerprint: true
+            archiveArtifacts artifacts: 'target/cucumber-reports/**/*.html', fingerprint: true
 
             // Publish the Cucumber reports
             cucumberReport()
@@ -54,6 +54,6 @@ def cucumberReport() {
     // Assuming you are using the Cucumber Reports Plugin
     cucumber {
         fileIncludePattern = '**/cucumber.json' // Adjust if necessary
-        jsonReportDir = 'target/cucumber-reports/json' // Adjust to your directory structure
+        jsonReportDir = 'target/cucumber-reports/html' // Adjust to your directory structure
     }
 }
