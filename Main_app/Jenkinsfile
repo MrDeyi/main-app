@@ -112,7 +112,7 @@ def sendEmailReport() {
                     </body>
                     </html>
                 """,
-                attachments: attachments,
+                attach: attachments,
                 mimeType: 'text/html'
             )
             println("Email report sent successfully.")
