@@ -76,16 +76,27 @@ def cucumberReport() {
 
 def sendEmailReport() {
     // Send email notification with the Cucumber report attached
-    emailext (
-        to: "${RECIPIENTS}",
-        subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
-        body: """<p>Hello,</p>
-                  <p>Please find attached the Cucumber test results for the build: ${currentBuild.fullDisplayName}.</p>
-                  <p>Best regards,</p>
-                  <p>Your Jenkins CI</p>""",
-        attachLog: true,
-        attachmentsPattern: 'Main_app/target/**/*.html,Main_app/target/**/*.json', // Attach reports
-        mimeType: 'text/html',
-         debug: true
-    )
+    try {
+        mail(
+            to: "${RECIPIENTS}",
+            subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
+            body: """
+                <html>
+                <body>
+                    <p>Hello,</p>
+                    <p>Please find attached the Cucumber test results for the build: ${currentBuild.fullDisplayName}.</p>
+                    <p>Best regards,</p>
+                    <p>Your Jenkins CI</p>
+                </body>
+                </html>
+            """,
+            attachmentsPattern: 'Main_app/target/**/*.html,Main_app/target/**/*.json', // Attach reports
+            mimeType: 'text/html'
+        )
+        println("Email report sent successfully.")
+    } catch (e) {
+        println("Error sending email report: ${e.getMessage()}")
+        // Optionally, rethrow the exception or handle it differently
+        // throw e;
+    }
 }
