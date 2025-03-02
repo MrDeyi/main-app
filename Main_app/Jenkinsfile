@@ -75,8 +75,18 @@ def cucumberReport() {
 }
 
 def sendEmailReport() {
-    // Send email notification with the Cucumber report attached
     try {
+        def htmlFiles = findFiles(glob: 'Main_app/target/**/*.html')
+        def jsonFiles = findFiles(glob: 'Main_app/target/**/*.json')
+        def attachments = []
+
+        htmlFiles.each { file ->
+            attachments.add(file.path)
+        }
+        jsonFiles.each { file ->
+            attachments.add(file.path)
+        }
+
         mail(
             to: "${RECIPIENTS}",
             subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
@@ -90,13 +100,11 @@ def sendEmailReport() {
                 </body>
                 </html>
             """,
-            attachmentsPattern: 'Main_app/target/**/*.html,Main_app/target/**/*.json', // Attach reports
+            attach: attachments,
             mimeType: 'text/html'
         )
         println("Email report sent successfully.")
     } catch (e) {
         println("Error sending email report: ${e.getMessage()}")
-        // Optionally, rethrow the exception or handle it differently
-        // throw e;
     }
 }
