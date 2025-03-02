@@ -85,6 +85,7 @@ def sendEmailReport() {
                   <p>Your Jenkins CI</p>""",
         attachLog: true,
         attachmentsPattern: 'Main_app/target/**/*.html,Main_app/target/**/*.json', // Attach reports
-        mimeType: 'text/html' // Use HTML for the email body
+        mimeType: 'text/html',
+         debug: true
     )
 }
