@@ -51,7 +51,7 @@ pipeline {
                 def targetDirExists = fileExists('Main_app/target')
                 if (targetDirExists) {
                     // Archive the HTML and JSON reports directly from the target directory within Main_app
-                    archiveArtifacts artifacts: 'Main_app/target/*.json,Main_app/target/**/*.html', fingerprint: true
+                    archiveArtifacts artifacts: 'Main_app/target/*.json,Main_app/target/*.html', fingerprint: true
 
                     // Publish the Cucumber report
                     cucumberReport()
