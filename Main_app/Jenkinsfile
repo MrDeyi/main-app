@@ -76,7 +76,8 @@ def cucumberReport() {
 
 def sendEmailReport() {
     try {
-        def htmlReportPath = "Main_app/target/cucumber-reports.html"
+        // Find the location of the generated HTML report
+        def htmlReportPath = "${env.BUILD_DIR}/cucumber-reports.html" // Adjust path as needed
         def jsonReportPath = "Main_app/target/cucumber.json"
 
         def attachments = []
