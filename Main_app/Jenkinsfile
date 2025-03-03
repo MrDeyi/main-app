@@ -102,8 +102,8 @@ def sendEmailReport() {
         if (attachments) {
             emailext(
                 to: 'mandilake@anylytical.co.za',
-                from: 'jenkins@example.com',
-                replyTo: 'jenkins@example.com',
+                from: 'mandilakhedeyi01@gmail.com',
+                replyTo: 'mandilakhedeyi01@gmail.com',
                 subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
                 body: """
                     <html>
