@@ -7,7 +7,7 @@ pipeline {
         BRANCH = 'main'
         CREDENTIALS_ID = 'github-security-passcode'
         REPO_URL = 'https://github.com/MrDeyi/main-app.git'
-        RECIPIENTS = 'mandilakhedeyi01@gmail.com' // Replace with your email address
+        RECIPIENTS = 'mandilakhedeyi01@gmail.com,Mandilake.Deyi@mixtelematics.com' // Replace with your email address
     }
 
     tools {
