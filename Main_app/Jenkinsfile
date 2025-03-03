@@ -81,7 +81,7 @@ def sendEmailReport() {
         def jsonReportPath = "Main_app/target/cucumber.json"
 
         // Initialize attachments list
-        def attachments = []
+        def attachments =
 
         // Check if the HTML report exists
         if (fileExists(htmlReportPath)) {
@@ -113,9 +113,9 @@ def sendEmailReport() {
                     </body>
                     </html>
                 """,
-                attachmentsPattern: attachments.join(','),
-                mimeType: 'text/html',
-                debug: true
+                attachLog: true, // This will attach the build log
+                attachmentsPattern: attachments.join(','), // This will attach the reports
+                mimeType: 'text/html'
             )
             println("Email report sent successfully.")
         } else {
