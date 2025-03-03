@@ -58,7 +58,6 @@ pipeline {
                     cucumberReport()
                     // Send email with the Cucumber report attached
                     sendEmailReport()
-                    echo 'Successfully sent'
                 } else {
                     echo 'Target directory does not exist. Skipping artifact archiving and report publishing.'
                 }
@@ -102,8 +101,9 @@ def sendEmailReport() {
 
         if (attachments) {
             emailext(
-                to: "${RECIPIENTS}",
-                from:"${FROM_EMAIL}",
+                to: 'mandilakhedeyi01@gmail.com',
+                from: 'jenkins@example.com',
+                replyTo: 'jenkins@example.com',
                 subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
                 body: """
                     <html>
