@@ -114,7 +114,8 @@ def sendEmailReport() {
                     </html>
                 """,
                 attachmentsPattern: attachments.join(','),
-                mimeType: 'text/html'
+                mimeType: 'text/html',
+                debug: true
             )
             println("Email report sent successfully.")
         } else {
