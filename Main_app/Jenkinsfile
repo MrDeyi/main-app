@@ -101,7 +101,7 @@ def sendEmailReport() {
 
         if (attachments) {
             emailext(
-                to: 'mandilakhedeyi@gmail.com',
+                to: 'mandilakhedeyi01@gmail.com',
                 from: 'jenkins@example.com',
                 replyTo: 'jenkins@example.com',
                 subject: "Cucumber Test Results - ${currentBuild.fullDisplayName}",
